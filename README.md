@@ -29,6 +29,7 @@ par(mfrow=c(2,2))#R语言多图形
 #par(mar=c(5, 4, 4, 2) + 0.1)
 par(mai=c(0.5, 0.5,0.5, 0.3))#R语言边框设置
 par(oma=c(1,1, 1, 1))
+
 图1
 plot(window(d1,start=c(2011,1)),ylab="电量",xlab="年份",main="办公建筑 A")
 points(window(d1,start=c(2011,1)),pch=Month)
@@ -46,103 +47,6 @@ points(window(d4,start=c(2011,1)),pch=Month)
 plot(window(d5,start=c(2011,1)),ylab="电量",xlab="年份",main="办公建筑 E")
 points(window(d5,start=c(2011,1)),pch=Month)
 
-mP<- HoltWinters(d5 )
-Pforecasts2 <-forecast.HoltWinters(mP, h=12)
-
-Data<-ts(t1,start=c(2011,1),frequency=12)
-plot(window(Data,start=c(2011,1)),ylab="电量",xlab="年份")
-
-Month=c("J","F","M","A","M","J","J","A","S","O","N","D")
-points(window(Data,start=c(2011,1)),pch=Month)
-#差分前acf图
-acf(as.vector(Data),main="",xlab="滞后",lag.max=25)
-#一次差分后acf和pacf
-acf(as.vector(diff(Data)),main="",lag.max=25,xlab="滞后")
-pacf(as.vector(diff(Data)),main="",lag.max=25,xlab="滞后")
-eacf(as.vector(diff(Data)))
-
-#一次差分后的周期图
-periodogram(Data)
-plot(diff(Data))
-abline(h=0)
-points(window(diff(Data),start=c(2011,1)),pch=Month)
-plot(diff(diff(Data)))
-acf(as.vector(diff(Data,lag=12)),main="",lag.max=36,xlab="滞后")
-#对数据进行拆分
- plot(stl(Data, "per"))
-mP<- HoltWinters(Data,optim.start = c(alpha = 0.1, beta = 0.1, gamma = 0.5) )
-library(forecast)
-Pforecasts2 <-forecast.HoltWinters(mP, h=12)
-plot.forecast(Pforecasts2)#置信区间检测
-Box.test(Pforecasts2$residuals, lag=20, type="Ljung-Box")#Ljung-Box检验
-res<-residuals(mP)#残差值
-
-scale(
-pacf(Pforecasts2$residuals, lag.max=20)#acf监测
-plot(Pforecasts2$residuals)
-hist(window(rstandard(mP),start=2011,1))
-
-pre<-c(548160,487380,463980,388320,438840,655620,804600,852540,679500)
-prec<-c(517759,368284.5,546960.2,385229.4,457593.3,726895,745249.7,883308.4,679535.9)
-
-tp1<-c(t1,pre)
-tp2<-c(t1,prec)
-tp1<-ts(tp1,start=c(2011,1),frequency=12)
-tp2<-ts(tp2,start=c(2011,1),frequency=12)
-plot(window(tp1,start=c(2011,1)),ylab="电量",xlab="年份")
-Month=c("J","F","M","A","M","J","J","A","S","O","N","D")
-points(window(tp1,start=c(2011,1)),pch=Month)
-points(prec,pch=16)
-
-plot(tp1)fittf
-lines(tp2,col="red")
-
-##模拟
-m1.p=arima(Data,order=c(0,1,12),seasonal=list(order=c(0,1,12),period=6))
-
-#ylim=c(500000,5500000))
-#y=-233.4*x^2+82682.7*x+2289340.2
-#plot(t3)
-#Data2<-t3-y
-#plot(t3,type="l")
-plot(Data2,type="l")
-#abline(2428664,70154)
-x<-c(1:60)
-x1<-t3[1:59]
-x2<-t3[2:60]
-plot(x,y)
-t<-as.vector(read.table("time.txt"))
-ni<-lmrob(t3~I(x^2)+x)
-d1<-ts(t1,start=c(2011,1),frequency=12)
-d2<-ts(t2,start=c(2011,1),frequency=12)
-d3<-ts(t3,start=c(2011,1),frequency=12)
-d4<-ts(t4,start=c(2011,1),frequency=12)
-d5<-ts(t5,start=c(2011,1),frequency=12)
-Month=c("J","F","M","A","M","J","J","A","S","O","N","D")
-mP<- HoltWinters(d5,beta=FALSE)
-Pforecasts2 <-forecast.HoltWinters(mP, h=12)
-Pforecasts2
-par(mfrow=c(2,2))
-#par(mar=c(5, 4, 4, 2) + 0.1)
-par(mai=c(0.5, 0.5,0.5, 0.3))
-par(oma=c(1,1, 1, 1))
-图1
-plot(window(d1,start=c(2011,1)),ylab="电量",xlab="年份",main="办公建筑 A")
-points(window(d1,start=c(2011,1)),pch=Month)
-图2
-plot(window(d2,start=c(2011,1)),ylab="电量",xlab="年份",main="办公建筑 B")
-points(window(d2,start=c(2011,1)),pch=Month)
-图3
-plot(window(d3,start=c(2011,1)),ylab="电量",xlab="年份",main="办公建筑 C")
-points(window(d3,start=c(2011,1)),pch=Month)
-图4
-plot(window(d4,start=c(2011,1)),ylab="电量",xlab="年份",main="办公建筑 D")
-points(window(d4,start=c(2011,1)),pch=Month)
-图5
-plot(window(d5,start=c(2011,1)),ylab="电量",xlab="年份",main="办公建筑 E")
-points(window(d5,start=c(2011,1)),pch=Month)
-
-library(forecast)
 mP<- HoltWinters(d5 )
 Pforecasts2 <-forecast.HoltWinters(mP, h=12)
 
@@ -158,12 +62,6 @@ acf(as.vector(diff(Data)),main="",lag.max=25,xlab="滞后")
 pacf(as.vector(diff(Data)),main="",lag.max=25,xlab="滞后")
 eacf(as.vector(diff(Data)))
 periodogram(Data)#一次差分后的周期图
-acf(as.vector(diff(Data,lag=12)),main="",lag.max=36,xlab="滞后")#acf图
-plot(stl(Data, "per"))#对数据进行拆分
+#对数据进行拆分
+ plot(stl(Data, "per"))
 mP<- HoltWinters(Data,optim.start = c(alpha = 0.1, beta = 0.1, gamma = 0.5) )
-library(forecast)
-Pforecasts2 <-forecast.HoltWinters(mP, h=12)
-plot.forecast(Pforecasts2)#置信区间检测
-Box.test(Pforecasts2$residuals, lag=20, type="Ljung-Box")#Ljung-Box检验
-res<-residuals(mP)#残差值
-
